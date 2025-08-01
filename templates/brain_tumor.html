@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Brain Tumor Detection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 { margin-bottom: 30px; }
+        form {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        input[type="file"]:hover {
+            background-color: #e8f5e9;
+        }
+        input[type="submit"] {
+            margin-top: 15px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover { background-color: #45a049; }
+        .result {
+            background: white;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 500px;
+        }
+        img {
+            max-width: 300px;
+            margin-top: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Brain Tumor Detection</h1>
+    <form action="/brain_tumor_predict" method="post" enctype="multipart/form-data">
+        <input id="fileInput" name="file" type="file" accept="image/*" onchange="previewImage(event)" required>
+        <input type="submit" value="Upload & Predict">
+        <img id="preview" src="#" alt="Image Preview">
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h2>Prediction Result</h2>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

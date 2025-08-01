@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Image Prediction History</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .top-bar {
+      width: 100%;
+      max-width: 800px;
+      margin: 30px auto 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+    }
+
+    .top-bar .username {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .back-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #74ebd5;
+      color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      box-shadow: 0 2px 6px rgba(116,235,213,0.3);
+      user-select: none;
+    }
+
+    .back-button:hover {
+      background: #ACB6E5;
+      box-shadow: 0 4px 12px rgba(172,182,229,0.5);
+    }
+
+    h2 {
+      margin-top: 30px;
+      color: #333;
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .history-container {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      width: 90%;
+      padding: 20px 30px;
+      margin: 30px 0 60px 0;
+      overflow-x: auto;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #74ebd5;
+      color: #333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+      transition: background-color 0.2s ease;
+    }
+
+    td.result-warning {
+      color: #d9534f;
+      font-weight: 600;
+    }
+
+    td.result-normal {
+      color: #5cb85c;
+      font-weight: 600;
+    }
+
+    @media(max-width: 600px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 20px;
+        max-width: 95vw;
+      }
+      .history-container {
+        width: 95vw;
+        padding: 15px 20px;
+      }
+      h2 {
+        width: 95vw;
+      }
+      th, td {
+        font-size: 14px;
+        padding: 10px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="username">Hello, {{ username }}</div>
+    <a href="/image_detector" class="back-button" aria-label="Go back to image detector">🖼️ Image Detector</a>
+  </div>
+
+  <h2>Your Image Prediction History</h2>
+
+  <div class="history-container" role="region" aria-live="polite" aria-label="Image prediction history table">
+    {% if history %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Model</th>
+          <th>Result</th>
+          <th>Date & Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in history %}
+        <tr>
+          <td>{{ record.id }}</td>
+          <td>{{ record.disease|capitalize }}</td>
+          <td class="{% if 'detected' in record.result.lower() %}result-warning{% else %}result-normal{% endif %}">
+            {{ record.result }}
+          </td>
+          <td>{{ record.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p style="text-align:center; font-style: italic; color: #555; margin-top: 40px;">
+        No image prediction history found.
+      </p>
+    {% endif %}
+  </div>
+</body>
+</html>
