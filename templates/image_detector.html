@@ -14,6 +14,7 @@
       flex-direction: column;
       align-items: center;
     }
+
     .top-bar {
       width: 100%;
       max-width: 1100px;
@@ -45,81 +46,12 @@
       background: #ACB6E5;
     }
 
-    .user-info {
-      font-weight: bold;
-      color: #333;
-      font-size: 16px;
-      flex: 1;
-    }
-
-    .profile-container {
-      position: relative;
-      display: inline-block;
-    }
-
-    .profile-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background: url('https://cdn-icons-png.flaticon.com/512/1077/1077114.png') no-repeat center;
-      background-size: cover;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .profile-icon:hover {
-      transform: scale(1.1);
-    }
     .top-heading {
       font-size: 24px;
       color: #333;
-      margin: 0;
+      margin: 0 auto;
       flex-grow: 1;
       text-align: center;
-    }
-
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      background-color: #fff;
-      min-width: 140px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-      border-radius: 8px;
-      z-index: 1;
-    }
-
-    .dropdown-content form, .dropdown-content a {
-      padding: 12px 18px;
-      display: block;
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-      border-bottom: 1px solid #eee;
-      transition: background-color 0.2s ease;
-    }
-
-    .dropdown-content form:last-child, .dropdown-content a:last-child {
-      border-bottom: none;
-    }
-
-    .dropdown-content form button {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      width: 100%;
-      text-align: left;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .dropdown-content form button:hover, .dropdown-content a:hover {
-      background-color: #f1f1f1;
-    }
-
-    .profile-container:hover .dropdown-content {
-      display: block;
     }
 
     h2 {
@@ -184,58 +116,18 @@
       z-index: 1;
       user-select: none;
     }
-
-    .view-history-btn {
-      display: block;
-      max-width: 1100px;
+    .description {
+      max-width: 900px;
       width: 90%;
-      margin: 0 auto 40px auto;
-      text-align: right;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 16px;
+      color: #424242;
+      text-align: center;
+      margin-bottom: 40px;
+      line-height: 1.6;
     }
-
-    .view-history-btn a {
-      background: #74ebd5;
-      color: #333;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 15px;
-      box-shadow: 0 4px 8px rgba(116,235,213,0.5);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
-    }
-
-    .view-history-btn a:hover {
-      background: #ACB6E5;
-      box-shadow: 0 6px 14px rgba(172,182,229,0.7);
-    }
-
-
-    table {
-      width: 100%;
-      max-width: 1100px;
-      border-collapse: collapse;
-      margin: 20px auto 40px auto;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #74ebd5;
-      color: #333;
-      font-weight: bold;
-    }
-
-    tr:hover { background-color: #f1f1f1; }
 
     @media(max-width: 600px) {
       .top-bar {
@@ -250,6 +142,7 @@
       }
     }
   </style>
+</head>
 <body>
   <div class="top-bar" role="banner">
     <a href="/image_detector" class="home-icon" aria-label="Go to home page" title="Home">🏠</a>
@@ -262,33 +155,9 @@
     <a href="/brain_tumor" class="grid-item" role="link"><span>Brain Tumor Detector</span></a>
     <a href="/cifar10" class="grid-item" role="link"><span>CIFAR-10 Image Classifier</span></a>
   </nav>
-
-  <h2>Recent Image Predictions (Last 5)</h2>
-  {% if history %}
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Disease</th>
-        <th>Result</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for record in history %}
-      <tr>
-        <td>{{ record.id }}</td>
-        <td>{{ record.disease|capitalize }}</td>
-        <td>{{ record.result }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  <p style="text-align:center; font-style: italic; color: #555;">No recent predictions found.</p>
-  {% endif %}
-
-  <div class="view-history-btn">
-    <a href="/image_history" aria-label="View full image prediction history">View Full Image Prediction History &raquo;</a>
-  </div>
+  
+  <section class="description">
+    This AI-based app classifies uploaded images using deep learning models trained on datasets like CIFAR-10, MNIST, and Brain Tumor MRI scans. It detects objects, digits, or medical conditions and returns the predicted label with confidence and have the accuracy above 90%.
+  </section>
 </body>
 </html>

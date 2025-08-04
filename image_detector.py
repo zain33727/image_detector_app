@@ -3,7 +3,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
-from database import SessionLocal, PredictionHistory
 from PIL import Image
 import numpy as np
 import shutil
@@ -27,19 +26,10 @@ cifar10_classes = ['airplane', 'automobile', 'bird', 'cat', 'deer',
 @app.get("/", response_class=HTMLResponse)
 @app.get("/image_detector", response_class=HTMLResponse)
 async def image_detector_home(request: Request):
-    db = SessionLocal()
-    try:
-        history = db.query(PredictionHistory).filter(
-            PredictionHistory.disease.in_(["mnist_digit", "brain_tumor", "cifar10"])
-        ).order_by(PredictionHistory.created_at.desc()).limit(5).all()
-
-        return templates.TemplateResponse("image_detector.html", {
-            "request": request,
-            "username": "Guest",
-            "history": history
-        })
-    finally:
-        db.close()
+    return templates.TemplateResponse("image_detector.html", {
+        "request": request,
+        "result": None
+    })
 
 
 @app.get("/mnist", response_class=HTMLResponse)
@@ -58,16 +48,6 @@ async def mnist_predict(request: Request, file: UploadFile = File(...)):
     predicted_class = np.argmax(prediction)
     confidence = float(np.max(prediction)) * 100
     result_text = f"Predicted digit: {predicted_class} with {confidence:.2f}% confidence."
-
-    db = SessionLocal()
-    new_history = PredictionHistory(
-        user_id=0,
-        disease="mnist_digit",
-        result=result_text
-    )
-    db.add(new_history)
-    db.commit()
-    db.close()
 
     return templates.TemplateResponse("mnist.html", {"request": request, "result": result_text})
 
@@ -100,16 +80,6 @@ async def brain_tumor_predict(request: Request, file: UploadFile = File(...)):
     finally:
         os.remove(file_location)
 
-    db = SessionLocal()
-    new_history = PredictionHistory(
-        user_id=0,
-        disease="brain_tumor",
-        result=result_text
-    )
-    db.add(new_history)
-    db.commit()
-    db.close()
-
     return templates.TemplateResponse("brain_tumor.html", {"request": request, "result": result_text})
 
 
@@ -141,15 +111,5 @@ async def cifar10_predict(request: Request, file: UploadFile = File(...)):
 
     finally:
         os.remove(file_location)
-
-    db = SessionLocal()
-    new_history = PredictionHistory(
-        user_id=0,
-        disease="cifar10",
-        result=result_text
-    )
-    db.add(new_history)
-    db.commit()
-    db.close()
 
     return templates.TemplateResponse("cifar10.html", {"request": request, "result": result_text})
